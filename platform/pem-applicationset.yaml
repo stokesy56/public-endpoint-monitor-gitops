@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: pem-all-envs
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - env: dev
+            ns: pem-dev
+            values: apps/pem-dev/values.yaml
+          - env: stag
+            ns: pem-stag
+            values: apps/pem-stag/values.yaml
+          - env: prod
+            ns: pem-prod
+            values: apps/pem-prod/values.yaml
+  template:
+    metadata:
+      name: pem-{{env}}
+    spec:
+      source:
+        repoURL: europe-west2-docker.pkg.dev/public-endpoint-monitor/public-endpoint-monitor-registry/helm/public-endpoint-monitor
+        chart: public-endpoint-monitor
+        targetRevision: {{HEAD}}
+        helm:
+          valueFiles:
+            - '{{values}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{ns}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

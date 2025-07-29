@@ -1,0 +1,7 @@
+replicaCount: 1
+serviceMonitor:
+  scrapeInterval: 30s
+targets:
+  - type: http
+    name: Google
+    url: https://www.google.com
