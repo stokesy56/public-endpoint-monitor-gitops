@@ -20,6 +20,7 @@ spec:
     metadata:
       name: pem-{{env}}
     spec:
+      project: default
       source:
         repoURL: europe-west2-docker.pkg.dev/public-endpoint-monitor/public-endpoint-monitor-registry/helm/public-endpoint-monitor
         chart: public-endpoint-monitor
