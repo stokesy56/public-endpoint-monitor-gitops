@@ -23,13 +23,13 @@ spec:
       source:
         repoURL: europe-west2-docker.pkg.dev/public-endpoint-monitor/public-endpoint-monitor-registry/helm/public-endpoint-monitor
         chart: public-endpoint-monitor
-        targetRevision: {{HEAD}}
+        targetRevision: "{{HEAD}}"
         helm:
           valueFiles:
-            - '{{values}}'
+            - "{{values}}"
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{{ns}}'
+        namespace: "{{ns}}"
       syncPolicy:
         automated:
           prune: true
