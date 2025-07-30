@@ -1,12 +1,12 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: pem‑dev
+  name: pem-dev
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
   labels:
-    app.kubernetes.io/part‑of: public-endpoint-monitor
+    app.kubernetes.io/part-of: public-endpoint-monitor
 spec:
   project: default
 
@@ -17,7 +17,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: pem‑dev
+    namespace: pem-dev
 
   syncPolicy:
     automated:
