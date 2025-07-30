@@ -11,7 +11,7 @@ spec:
   project: default
 
   source:
-    repoURL: oci://europe-west2-docker.pkg.dev/public-endpoint-monitor/public-endpoint-monitor-registry
+    repoURL: europe-west2-docker.pkg.dev/public-endpoint-monitor/public-endpoint-monitor-registry
     chart: public-endpoint-monitor
     targetRevision: "0.1.*"
 
