@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: pem‑dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/part‑of: public-endpoint-monitor
+spec:
+  project: default
+
+  source:
+    repoURL: oci://europe-west2-docker.pkg.dev/public-endpoint-monitor/public-endpoint-monitor-registry
+    chart: public-endpoint-monitor
+    targetRevision: "0.1.*"
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: pem‑dev
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
