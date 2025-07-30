@@ -4,6 +4,7 @@ metadata:
   name: platform
   namespace: argocd
 spec:
+  project: default
   source:
     repoURL: git@github.com:stokesy56/public-endpoint-monitor-gitops.git
     path: platform

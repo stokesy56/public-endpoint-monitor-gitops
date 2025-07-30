@@ -9,30 +9,33 @@ spec:
         elements:
           - env: dev
             ns: pem-dev
-          - env: stag
-            ns: pem-stag
           - env: prod
             ns: pem-prod
+
   template:
     metadata:
       name: pem-{{env}}
-      labels: { app.kubernetes.io/managed-by: argocd-appset }
+      labels:
+        app.kubernetes.io/managed-by: argocd-appset
+
     spec:
       project: default
       sources:
-        - repoURL: europe-west2-docker.pkg.dev/public-endpoint-monitor/public-endpoint-monitor-registry
-          chart: helm/public-endpoint-monitor
-          targetRevision: "1.0.*"
+        - repoURL: oci://europe-west2-docker.pkg.dev/public-endpoint-monitor/public-endpoint-monitor-registry
+          chart: public-endpoint-monitor
+          targetRevision: "0.1.*"
         - repoURL: git@github.com:stokesy56/public-endpoint-monitor-gitops.git
           targetRevision: main
-          ref: envvals
+
       helm:
         valueFiles:
-          - apps/pem-{{env}}/values.yaml?ref=envvals
+          - apps/pem-{{env}}/values.yaml
+
       destination:
-        server: https://kubernetes.default.svc
+        server:    https://kubernetes.default.svc
         namespace: "{{ns}}"
+
       syncPolicy:
         automated:
-          prune: true
+          prune:    true
           selfHeal: true
