@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: pem-dev
   namespace: argocd
-  labels:
-    app.kubernetes.io/part-of: public-endpoint-monitor
 spec:
   project: default
 
@@ -14,12 +12,12 @@ spec:
     targetRevision: "0.1.8"
 
   destination:
-    server: https://kubernetes.default.svc
+    server: 'https://kubernetes.default.svc'
     namespace: pem-dev
 
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: false
+      selfHeal: false
     syncOptions:
       - CreateNamespace=true
