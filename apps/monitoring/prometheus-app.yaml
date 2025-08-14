@@ -23,6 +23,9 @@ spec:
           enabled: false
         pushgateway:
           enabled: false
+        prometheus-node-exporter:
+          enabled: false
+
 
         # --- Prometheus server settings ---
         server:
