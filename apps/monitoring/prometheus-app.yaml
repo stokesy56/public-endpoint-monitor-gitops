@@ -29,15 +29,6 @@ spec:
 
         # --- Prometheus server settings ---
         server:
-          # Smallish requests that run fine on Autopilot
-          resources:
-            requests:
-              cpu: 100m
-              memory: 256Mi
-            limits:
-              cpu: 500m
-              memory: 512Mi
-
           # Keep data ephemeral (no PVC)
           persistentVolume:
             enabled: false
