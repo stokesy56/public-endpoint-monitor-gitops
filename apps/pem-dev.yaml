@@ -5,16 +5,13 @@ metadata:
   namespace: argocd
 spec:
   project: default
-
   source:
     repoURL: europe-west2-docker.pkg.dev/public-endpoint-monitor/public-endpoint-monitor-registry
     chart: helm/public-endpoint-monitor
     targetRevision: "0.1.*"
-
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: pem-dev
-
   syncPolicy:
     automated:
       prune: true
