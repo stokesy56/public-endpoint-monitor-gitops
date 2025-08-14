@@ -29,9 +29,20 @@ spec:
 
         # --- Prometheus server settings ---
         server:
+          resources:
+            requests:
+              cpu: 200m
+              memory: 512Mi
+              ephemeral-storage: 1Gi
+            limits:
+              cpu: 1
+              memory: 2Gi
+              ephemeral-storage: 4Gi
+
           # Keep data ephemeral (no PVC)
           persistentVolume:
             enabled: false
+            size: 8Gi
 
           # Service as ClusterIP
           service:
@@ -39,14 +50,21 @@ spec:
             port: 80
 
           # Scrape only  PEM service (static config; no operator needed)
-          extraScrapeConfigs: |
-            - job_name: 'pem'
-              scrape_interval: 30s
-              static_configs:
-              - targets:
-                - 'pem-dev-pem-metrics.pem-dev.svc.cluster.local:9000'
-                labels:
-                  app: pem
+          scrape_configs:
+            - job_name: pem
+              kubernetes_sd_configs:
+                - role: endpoints
+              relabel_configs:
+                - source_labels: [__meta_kubernetes_namespace]
+                  action: keep
+                  regex: pem-dev
+                - source_labels: [__meta_kubernetes_service_name]
+                  action: keep
+                  regex: public-endpoint-monitor-metrics
+                - source_labels: [__meta_kubernetes_endpoint_port_name]
+                  action: keep
+                  regex: metrics
+
 
   syncPolicy:
     automated:
