@@ -1,0 +1,62 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: monitoring-prometheus
+  namespace: argocd
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: prometheus
+    targetRevision: 27.30.0
+    helm:
+      values: |
+        # --- turn off components Autopilot would block ---
+        alertmanager: # just don't want
+          enabled: false
+        kube-state-metrics:
+          enabled: false
+        nodeExporter:
+          enabled: false
+        pushgateway:
+          enabled: false
+
+        # --- Prometheus server settings ---
+        server:
+          # Smallish requests that run fine on Autopilot
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+
+          # Keep data ephemeral (no PVC)
+          persistentVolume:
+            enabled: false
+
+          # Service as ClusterIP
+          service:
+            type: ClusterIP
+            port: 80
+
+          # Scrape only  PEM service (static config; no operator needed)
+          extraScrapeConfigs: |
+            - job_name: 'pem'
+              scrape_interval: 30s
+              static_configs:
+              - targets:
+                - 'pem-dev-pem-metrics.pem-dev.svc.cluster.local:9000'
+                labels:
+                  app: pem
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
