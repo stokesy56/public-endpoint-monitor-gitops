@@ -31,8 +31,8 @@ spec:
         server:
           resources:
             requests:
-              cpu: 200m
-              memory: 512Mi
+              cpu: 100m
+              memory: 256Mi
               ephemeral-storage: 1Gi
             limits:
               cpu: 1
